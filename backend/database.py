@@ -16,3 +16,4 @@ def init_db():
             Task(id=1, title="Welcome Task", description="Get started with the Task Manager", completed=False, priority=Priority.HIGH)
         ]
 
+#new line

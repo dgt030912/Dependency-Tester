@@ -83,16 +83,3 @@ if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 #new line
-#new line 2
-#new line 3
-#new line 4
-#new line 5
-#new line 6
-#new line 7
-#new line 8
-#new line 9
-#new line 10
-#new line 11
-#new line 12
-#new line 13
-#new line 14

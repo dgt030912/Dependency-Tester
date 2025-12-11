@@ -1,46 +1,105 @@
 .App {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem 1rem;
+  min-height: 100vh;
 }
 
 .App-header {
   text-align: center;
   color: white;
-  margin-bottom: 30px;
+  margin-bottom: 2.5rem;
+  padding: 1rem 0;
 }
 
 .App-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  letter-spacing: -0.02em;
 }
 
 .App-header p {
-  font-size: 1.1rem;
-  opacity: 0.9;
+  font-size: 1.125rem;
+  opacity: 0.95;
+  font-weight: 400;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .App-main {
-  background: white;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(10px);
 }
 
 .error-message {
-  background: #fee;
-  color: #c33;
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  border-left: 4px solid #c33;
+  background: #fef2f2;
+  color: var(--danger-color);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--danger-color);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-message::before {
+  content: '⚠️';
+  font-size: 1.25rem;
 }
 
 .loading {
   text-align: center;
-  padding: 40px;
-  color: #666;
-  font-size: 1.1rem;
+  padding: 3rem 2rem;
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.loading::after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .App {
+    padding: 1rem 0.75rem;
+  }
+
+  .App-main {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+  }
 }
 

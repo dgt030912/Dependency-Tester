@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from models import Task, TaskCreate, TaskUpdate
 from database import get_db, init_db
-import uvicorn
 
 app = FastAPI(title="Task Manager API", version="1.0.0")
 
@@ -79,8 +78,8 @@ async def delete_task(task_id: int):
     db.pop(task_index)
     return {"message": "Task deleted successfully"}
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+# Run with: gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
+# Or for development: gunicorn main:app -w 1 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --reload
 
 #new line
 #nl2

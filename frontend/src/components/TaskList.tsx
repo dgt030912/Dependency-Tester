@@ -11,22 +11,12 @@ interface TaskListProps {
 
 const TaskList: React.FC<TaskListProps> = ({ tasks, onUpdate, onDelete }) => {
   if (tasks.length === 0) {
-    return (
-      <div className="empty-state">
-        <p>No tasks yet.</p>
-        <strong>Create one to get started!</strong>
-      </div>
-    );
+    return <div className="empty-state">No tasks yet. Create one to get started!</div>;
   }
 
   return (
     <div className="task-list">
-      <h2>
-        <span>Your Tasks</span>
-        <span style={{ color: 'var(--text-secondary)', fontWeight: 400, fontSize: '1rem' }}>
-          ({tasks.length})
-        </span>
-      </h2>
+      <h2>Your Tasks ({tasks.length})</h2>
       {tasks.map(task => (
         <TaskItem
           key={task.id}

@@ -10,7 +10,7 @@ const path = require('path');
 
 console.log('🚀 Starting build process...');
 
-// Check if directories exist
+// Check if directories existf
 const directories = [
   'backend',
   'frontend',

@@ -6,6 +6,8 @@ Test codebase for dependency graph generator
 - **backend/** - FastAPI Python backend
 - **frontend/** - React TypeScript frontend
 - **native/** - C and C++ utility code
+- **java/** - Java client application
+- **go/** - Go client application
 - **utils/** - JavaScript utility functions
 - **scripts/** - Build and utility scripts
 
@@ -39,4 +41,19 @@ npm start
 cd native
 make all
 make test
+```
+
+### Go Client
+```bash
+cd go
+go mod download
+go build
+go run main.go
+```
+
+### Java Client
+```bash
+cd java
+mvn clean compile
+mvn exec:java
 ```

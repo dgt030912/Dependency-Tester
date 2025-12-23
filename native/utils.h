@@ -12,7 +12,7 @@ long long factorial(int n);
 long long fibonacci(int n);
 
 /**
- * Check if a number is prime
+ * Check if a number is primee
  */
 int is_prime(int n);
 

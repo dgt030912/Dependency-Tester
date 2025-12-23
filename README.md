@@ -1,4 +1,4 @@
-# Dependency-Tester
+# Dependency-Tester lol
 Test codebase for dependency graph generator
 
 ## Project Structure

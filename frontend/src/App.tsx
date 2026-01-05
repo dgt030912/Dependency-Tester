@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import TaskList from './components/TaskList';
 import TaskForm from './components/TaskForm';
@@ -10,11 +10,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadTasks();
-  }, []);
-
-  const loadTasks = async () => {
+  const loadTasks = useCallback(async () => {
     try {
       setLoading(true);
       const data = await fetchTasks();
@@ -26,37 +22,41 @@ const App: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const handleCreateTask = async (task: Omit<Task, 'id'>) => {
+  useEffect(() => {
+    loadTasks();
+  }, [loadTasks]);
+
+  const handleCreateTask = useCallback(async (task: Omit<Task, 'id'>) => {
     try {
       const newTask = await createTask(task);
-      setTasks([...tasks, newTask]);
+      setTasks(prevTasks => [...prevTasks, newTask]);
     } catch (err) {
       setError('Failed to create task');
       console.error(err);
     }
-  };
+  }, []);
 
-  const handleUpdateTask = async (id: number, updates: Partial<Task>) => {
+  const handleUpdateTask = useCallback(async (id: number, updates: Partial<Task>) => {
     try {
       const updatedTask = await updateTask(id, updates);
-      setTasks(tasks.map(t => t.id === id ? updatedTask : t));
+      setTasks(prevTasks => prevTasks.map(t => t.id === id ? updatedTask : t));
     } catch (err) {
       setError('Failed to update task');
       console.error(err);
     }
-  };
+  }, []);
 
-  const handleDeleteTask = async (id: number) => {
+  const handleDeleteTask = useCallback(async (id: number) => {
     try {
       await deleteTask(id);
-      setTasks(tasks.filter(t => t.id !== id));
+      setTasks(prevTasks => prevTasks.filter(t => t.id !== id));
     } catch (err) {
       setError('Failed to delete task');
       console.error(err);
     }
-  };
+  }, []);
 
   return (
     <div className="App">
@@ -85,4 +85,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import TaskItem from './TaskItem';
 import { Task } from '../types';
 import './TaskList.css';
@@ -9,7 +9,7 @@ interface TaskListProps {
   onDelete: (id: number) => void;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onUpdate, onDelete }) => {
+const TaskList: React.FC<TaskListProps> = memo(({ tasks, onUpdate, onDelete }) => {
   if (tasks.length === 0) {
     return <div className="empty-state">No tasks yet. Create one to get started!</div>;
   }
@@ -27,7 +27,8 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onUpdate, onDelete }) => {
       ))}
     </div>
   );
-};
+});
+
+TaskList.displayName = 'TaskList';
 
 export default TaskList;
-

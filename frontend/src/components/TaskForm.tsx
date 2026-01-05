@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { TaskCreate, Priority } from '../types';
 import './TaskForm.css';
 
@@ -6,16 +6,17 @@ interface TaskFormProps {
   onSubmit: (task: TaskCreate) => void;
 }
 
-const TaskForm: React.FC<TaskFormProps> = ({ onSubmit }) => {
+const TaskForm: React.FC<TaskFormProps> = memo(({ onSubmit }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<Priority>(Priority.MEDIUM);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim()) {
+    const trimmedTitle = title.trim();
+    if (trimmedTitle) {
       onSubmit({
-        title: title.trim(),
+        title: trimmedTitle,
         description: description.trim(),
         priority,
         completed: false,
@@ -24,7 +25,19 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit }) => {
       setDescription('');
       setPriority(Priority.MEDIUM);
     }
-  };
+  }, [title, description, priority, onSubmit]);
+
+  const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  }, []);
+
+  const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(e.target.value);
+  }, []);
+
+  const handlePriorityChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPriority(e.target.value as Priority);
+  }, []);
 
   return (
     <form className="task-form" onSubmit={handleSubmit}>
@@ -35,7 +48,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit }) => {
           type="text"
           id="title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={handleTitleChange}
           required
           placeholder="Enter task title"
         />
@@ -45,7 +58,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit }) => {
         <textarea
           id="description"
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={handleDescriptionChange}
           placeholder="Enter task description (optional)"
           rows={3}
         />
@@ -55,7 +68,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit }) => {
         <select
           id="priority"
           value={priority}
-          onChange={(e) => setPriority(e.target.value as Priority)}
+          onChange={handlePriorityChange}
         >
           <option value={Priority.LOW}>Low</option>
           <option value={Priority.MEDIUM}>Medium</option>
@@ -65,7 +78,8 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit }) => {
       <button type="submit" className="btn-submit">Add Task</button>
     </form>
   );
-};
+});
+
+TaskForm.displayName = 'TaskForm';
 
 export default TaskForm;
-

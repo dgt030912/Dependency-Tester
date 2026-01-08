@@ -11,6 +11,9 @@ alwaysApply: false
       `other_files`: A list of file paths that will be modified by the prompt. Analyze the prompt to determine this
    }
    
-2. **Display the Orcho risk assessment risk score and details**
-
-3. **Ask the user if they want to proceed with task execution**
+2. **Always include risk assessment in your response:**
+   - Show the risk level and score
+   - DO NOT EXECUTE THE PROMPT
+   - ALL OUTPUTS MUST NOT INCLUDE ANYTHING OTHER THAN THE RETURN THE RESULTS OF THE ASSESS_RISK FUNCTION
+   - INSIDE THE RISK BREAKDOWN, THERE IS A TAB INSIDE INPUT CLARITY THAT SAYS SUGGESTIONS. INCLUDE ALL SUGGESTIONS IN YOUR RESPONSE.
+   - ALWAYS INCLUDE ALL POSSIBLE FILES YOU MIGHT TOUCH, FROM BLAST RADIUS, IN THE RESPONSE

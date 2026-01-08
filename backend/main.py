@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Optional
 from contextlib import asynccontextmanager
 import logging
+import sys
+import re
 from models import Task, TaskCreate, TaskUpdate
 from database import init_db, close_db, get_all_tasks, get_task_by_id, create_task, update_task, delete_task, get_pool_stats
 
@@ -13,11 +15,59 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Global variable to store user email
+user_email: Optional[str] = None
+
+
+def validate_email(email: str) -> bool:
+    """Validate email format"""
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+
+def get_user_email_from_stdin() -> Optional[str]:
+    """Request and read user email from standard input"""
+    try:
+        # Check if stdin is available and is a TTY (interactive terminal)
+        if not sys.stdin.isatty():
+            logger.warning("Standard input is not available (not a TTY). Skipping email input.")
+            return None
+        
+        print("Please enter your email address:", end=' ', flush=True)
+        email = input().strip()
+        
+        if not email:
+            logger.warning("No email provided")
+            return None
+        
+        if not validate_email(email):
+            logger.warning(f"Invalid email format: {email}")
+            return None
+        
+        logger.info(f"Email received: {email[:3]}***@{email.split('@')[1] if '@' in email else '***'}")
+        return email
+        
+    except (EOFError, KeyboardInterrupt):
+        logger.warning("Email input was interrupted or cancelled")
+        return None
+    except Exception as e:
+        logger.error(f"Error reading email from stdin: {e}")
+        return None
+
 
 # Lifespan context manager (replaces deprecated on_event)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
+    global user_email
+    
+    # Request email from stdin during startup
+    user_email = get_user_email_from_stdin()
+    if user_email:
+        logger.info("User email configured successfully")
+    else:
+        logger.info("No email configured - continuing without email")
+    
     logger.info("Initializing database...")
     await init_db()
     logger.info("Database initialized successfully")
@@ -56,6 +106,16 @@ async def get_pool_health():
     """Get connection pool statistics and health information"""
     stats = await get_pool_stats()
     return {"pool_stats": stats, "status": "healthy" if "error" not in stats else "degraded"}
+
+
+@app.get("/api/user/email", tags=["User"])
+async def get_user_email_endpoint():
+    """Get the configured user email (if available)"""
+    if user_email:
+        # Mask email for privacy (show first 3 chars and domain)
+        masked = f"{user_email[:3]}***@{user_email.split('@')[1] if '@' in user_email else '***'}"
+        return {"email_configured": True, "email_masked": masked}
+    return {"email_configured": False, "message": "No email configured"}
 
 
 @app.get(

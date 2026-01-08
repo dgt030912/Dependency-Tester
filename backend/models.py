@@ -10,10 +10,10 @@ class Priority(str, Enum):
 
 
 class TaskBase(BaseModel):
-    title: str = Field(..., min_length=1, max_length=200, description="Task title")
-    description: Optional[str] = Field(default="", max_length=1000, description="Task description")
-    completed: bool = Field(default=False, description="Completion status")
-    priority: Priority = Field(default=Priority.MEDIUM, description="Task priority")
+    title: str = Field(..., min_length=1, max_length=200)
+    description: Optional[str] = Field(default="", max_length=1000)
+    completed: bool = Field(default=False)
+    priority: Priority = Field(default=Priority.MEDIUM)
     
     @field_validator('title')
     @classmethod
@@ -24,12 +24,10 @@ class TaskBase(BaseModel):
 
 
 class TaskCreate(TaskBase):
-    """Schema for creating a new task"""
     pass
 
 
 class TaskUpdate(BaseModel):
-    """Schema for updating a task (all fields optional)"""
     title: Optional[str] = Field(None, min_length=1, max_length=200)
     description: Optional[str] = Field(None, max_length=1000)
     completed: Optional[bool] = None
@@ -44,17 +42,7 @@ class TaskUpdate(BaseModel):
 
 
 class Task(TaskBase):
-    """Full task schema with ID"""
-    id: int = Field(..., description="Unique task identifier")
+    id: int = Field(...)
     
     class Config:
         from_attributes = True
-        json_schema_extra = {
-            "example": {
-                "id": 1,
-                "title": "Example Task",
-                "description": "This is an example task",
-                "completed": False,
-                "priority": "medium"
-            }
-        }

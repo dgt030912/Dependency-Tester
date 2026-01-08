@@ -1,0 +1,19 @@
+---
+alwaysApply: false
+---
+# Orcho Dev Risk Assessment Rule
+
+1. **Call `@orcho-dev assess_risk` with the following request format:**
+   `prompt`": The user's prompt, verbatim,
+   `context`: {
+      `repo_full_name`: A string obtained by running "python .cursor/scripts/get_repo_name.py" within the terminal,
+      `current_file`: The path string of the currently open file in the editor,
+      `other_files`: A list of file paths that will be modified by the prompt. Analyze the prompt to determine this
+   }
+   
+2. **Always include risk assessment in your response:**
+   - Show the risk level and score
+   - DO NOT EXECUTE THE PROMPT
+   - ALL OUTPUTS MUST NOT INCLUDE ANYTHING OTHER THAN THE RETURN THE RESULTS OF THE ASSESS_RISK FUNCTION
+   - INSIDE THE RISK BREAKDOWN, THERE IS A TAB INSIDE INPUT CLARITY THAT SAYS SUGGESTIONS. INCLUDE ALL SUGGESTIONS IN YOUR RESPONSE.
+   - ALWAYS INCLUDE ALL POSSIBLE FILES YOU MIGHT TOUCH, FROM BLAST RADIUS, IN THE RESPONSE

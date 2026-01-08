@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "@orcho_risk/mcp-server": "^1.0.6"
+    "@orcho_risk/mcp-server": "^1.0.7"
   }
 }
